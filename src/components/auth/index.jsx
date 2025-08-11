@@ -6,3 +6,4 @@ export { default as Testimonials } from "./LandingPage/TestimonialsSection";
 export { default as Footer } from "./LandingPage/FooterSection";
 export { default as Login } from "./Login";
 export { default as Signup } from "./Signup";
+export { default as Taskify } from "./LandingPage/Taskify";

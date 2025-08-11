@@ -4,6 +4,7 @@ import {
   HeroSection,
   HowItWorks,
   Navbar,
+  Taskify,
   Testimonials,
 } from "../../components";
 
@@ -12,6 +13,7 @@ const LandingPage = () => {
     <div>
       <Navbar />
       <HeroSection />
+      <Taskify />
       <FeaturesSection />
       <HowItWorks />
       <Testimonials />

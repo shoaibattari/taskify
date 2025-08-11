@@ -9,4 +9,5 @@ export {
   Testimonials,
   Login,
   Signup,
+  Taskify,
 } from "./auth/index";

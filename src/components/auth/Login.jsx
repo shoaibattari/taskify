@@ -1,8 +1,11 @@
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CustomInput, Wrapper, CommonButton } from "../index";
+import { Link } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 
 const LoginForm = () => {
+  const { login, isLoggingIn } = useAuthContext();
   const initialValues = {
     email: "",
     password: "",
@@ -17,7 +20,7 @@ const LoginForm = () => {
 
   const handleLogin = (values) => {
     console.log("Login submitted", values);
-    // API call here
+    login(values);
   };
 
   return (
@@ -52,6 +55,7 @@ const LoginForm = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 error={touched.password && errors.password}
+                showPasswordToggle
               />
               <CommonButton type="submit" variant="primary" size="md" fullWidth>
                 Login
@@ -61,9 +65,9 @@ const LoginForm = () => {
         </Formik>
         <p className="text-sm text-gray-600 mt-4 text-center">
           Don’t have an account?{" "}
-          <a href="/signup" className="text-primary hover:underline">
-            Sign up
-          </a>
+          <Link to="/signup" className="text-primary hover:underline">
+            {isLoggingIn ? "Signing..." : "Sign up"}
+          </Link>
         </p>
       </div>
     </Wrapper>

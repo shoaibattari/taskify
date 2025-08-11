@@ -1,9 +1,11 @@
 // src/components/landing/Navbar.jsx
 import React from "react";
-import { Wrapper } from "../../common";
+import { CommonButton, Wrapper } from "../../common";
 import { FiCheckSquare } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <nav className="bg-white shadow sticky top-0 z-50">
       <Wrapper className="flex items-center justify-between py-4">
@@ -22,9 +24,9 @@ const Navbar = () => {
             Testimonials
           </a>
         </div>
-        <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition">
+        <CommonButton onClick={() => navigate("/login")}>
           Get Started
-        </button>
+        </CommonButton>
       </Wrapper>
     </nav>
   );

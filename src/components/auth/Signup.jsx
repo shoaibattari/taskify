@@ -1,8 +1,11 @@
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { CustomInput, Wrapper, CommonButton } from "../index";
+import { Link } from "react-router-dom";
+import { useAuthContext } from "../../context/AuthContext";
 
 const SignupForm = () => {
+  const { isRegistering, register } = useAuthContext();
   const initialValues = {
     name: "",
     email: "",
@@ -25,7 +28,7 @@ const SignupForm = () => {
 
   const handleSignup = (values) => {
     console.log("Signup submitted", values);
-    // API call here
+    register(values);
   };
 
   return (
@@ -69,6 +72,7 @@ const SignupForm = () => {
                 value={values.password}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                showPasswordToggle
                 error={touched.password && errors.password}
               />
               <CustomInput
@@ -79,19 +83,26 @@ const SignupForm = () => {
                 value={values.confirmPassword}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                showPasswordToggle
                 error={touched.confirmPassword && errors.confirmPassword}
               />
-              <CommonButton type="submit" variant="primary" size="md" fullWidth>
-                Sign Up
+              <CommonButton
+                disabled={isRegistering}
+                type="submit"
+                variant="primary"
+                size="md"
+                fullWidth
+              >
+                {isRegistering ? "Signing ...." : "Sign Up"}
               </CommonButton>
             </Form>
           )}
         </Formik>
         <p className="text-sm text-gray-600 mt-4 text-center">
           Already have an account?{" "}
-          <a href="/login" className="text-primary hover:underline">
+          <Link to="/login" className="text-primary hover:underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </Wrapper>

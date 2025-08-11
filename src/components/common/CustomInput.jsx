@@ -210,7 +210,7 @@ const CustomInput = ({
         </div>
       )}
 
-      {metaError && <p className="text-xs text-red-500 mt-1">{metaError}</p>}
+      {metaError && <p className="text-xs text-red mt-1">{metaError}</p>}
     </div>
   );
 };
