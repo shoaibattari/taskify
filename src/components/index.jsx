@@ -11,3 +11,6 @@ export {
   Signup,
   Taskify,
 } from "./auth/index";
+
+// user
+export { AddTaskify } from "./user/index";

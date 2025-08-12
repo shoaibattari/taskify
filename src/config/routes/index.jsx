@@ -1,5 +1,3 @@
-
-
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import UserLayout from "../../layout/User";
@@ -7,11 +5,10 @@ import AuthLayout from "../../layout/Auth";
 import AdminLayout from "../../layout/Admin";
 
 const Root = () => {
-    const { isAuthenticated, role, splashLoading } = useAuthContext();
+  const { isAuthenticated, role, splashLoading } = useAuthContext();
 
   return (
     <div>
-
       {splashLoading ? (
         <div className="h-screen flex items-center justify-center text-white bg-black w-full">
           Loading....

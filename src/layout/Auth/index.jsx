@@ -7,7 +7,7 @@ const AuthLayout = () => {
     <div>
       <div className="w-full">
         <Routes>
-          <Route path="/" element={<LandingPageScreen />} />
+          <Route path="/*" element={<LandingPageScreen />} />
           <Route path="/login" element={<LoginScreen />} />
           <Route path="/signup" element={<SignupScreen />} />
         </Routes>
