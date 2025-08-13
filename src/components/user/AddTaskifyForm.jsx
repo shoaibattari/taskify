@@ -1,16 +1,30 @@
-// src/components/Taskify/TaskifyForm.jsx
+// src/components/Taskify/AddTaskifyForm.jsx
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CommonButton, CustomInput, Wrapper } from "../common";
-import { useTaskifyContext } from "../../context/TaskifyContext";
 import { useNavigate } from "react-router-dom";
-const AddTaskifyForm = () => {
-  const { addTask, addingTask } = useTaskifyContext();
-  const [preview, setPreview] = useState(null);
+import { useMutation } from "react-query";
+import { toast } from "react-toastify";
+import apis from "../../config/api";
+import { FiUpload } from "react-icons/fi";
 
+const AddTaskifyForm = () => {
+  const [preview, setPreview] = useState(null);
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
+
+  const { mutate: addTask, isLoading: addingTask } = useMutation({
+    mutationFn: (formData) => apis.addTask(formData),
+    onSuccess: () => {
+      toast.success("Task added successfully!");
+      navigate("/");
+    },
+    onError: (error) => {
+      toast.error(error?.message || "Failed to add task");
+    },
+  });
+
   const initialValues = {
     title: "",
     description: "",
@@ -32,13 +46,12 @@ const AddTaskifyForm = () => {
     addTask(formData);
     resetForm();
     setPreview(null);
-    navigate("/");
   };
 
   return (
     <Wrapper className="py-12">
-      <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-8">
-        <h2 className="text-2xl font-bold text-center mb-6 text-primary">
+      <div className="max-w-lg mx-auto bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
+        <h2 className="text-3xl font-bold text-center mb-8 text-primary">
           Add New Task
         </h2>
 
@@ -55,7 +68,7 @@ const AddTaskifyForm = () => {
             values,
             setFieldValue,
           }) => (
-            <Form className="space-y-5">
+            <Form className="space-y-6">
               <CustomInput
                 label="Title"
                 name="title"
@@ -77,14 +90,39 @@ const AddTaskifyForm = () => {
 
               {/* Image Upload */}
               <div>
-                <label className="block mb-1 font-medium text-gray-700">
+                <label className="block mb-2 font-medium text-gray-700">
                   Avatar (optional)
                 </label>
+
+                <div className="flex items-center gap-4">
+                  {/* Upload Button */}
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current.click()}
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg shadow hover:bg-primary/90 transition"
+                  >
+                    <FiUpload size={18} />
+                    Upload Image
+                  </button>
+
+                  {/* Preview */}
+                  {preview && (
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="h-16 w-16 rounded-lg object-cover border shadow"
+                    />
+                  )}
+                </div>
+
+                {/* Hidden File Input */}
                 <input
                   type="file"
                   accept="image/*"
+                  ref={fileInputRef}
+                  className="hidden"
                   onChange={(e) => {
-                    const file = e.currentTarget.files[0];
+                    const file = e.target.files[0];
                     setFieldValue("avatar", file);
                     if (file) {
                       const reader = new FileReader();
@@ -92,15 +130,7 @@ const AddTaskifyForm = () => {
                       reader.readAsDataURL(file);
                     }
                   }}
-                  className="block w-full border border-gray-300 rounded-lg p-2"
                 />
-                {preview && (
-                  <img
-                    src={preview}
-                    alt="Preview"
-                    className="mt-3 h-24 w-24 object-cover rounded-lg"
-                  />
-                )}
               </div>
 
               <CommonButton

@@ -4,7 +4,7 @@ const taskifyApi = (api) => ({
   getTaskById: (id) => api.get(`/taskify/single/${id}`),
   editTask: (id, formData) => api.put(`/taskify/edit/${id}`, formData),
   deleteTask: (id) => api.delete(`/taskify/delete/${id}`),
-  deleteAllTasks: () => api.delete("/taskify/deleteAll"),
+  deleteAllTasks: () => api.delete("/taskify/delete-all"),
 });
 
 export default taskifyApi;

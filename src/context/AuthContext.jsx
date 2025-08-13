@@ -6,8 +6,8 @@ import {
   useCallback,
 } from "react";
 import { toast } from "react-toastify";
-import apis from "../config/api";
 import { useMutation } from "react-query";
+import apis from "../config/api";
 
 // Initial state
 const initialAuthState = {
@@ -15,36 +15,68 @@ const initialAuthState = {
   user: null,
   token: null,
   role: null,
-  splashLoading: false,
+  splashLoading: true,
 };
 
 const AuthContext = createContext(initialAuthState);
+
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState(initialAuthState);
 
-  // // ✅ LOGIN USER
+  // ✅ Backend se current user profile fetch karega
+  const { mutate: fetchUser } = useMutation({
+    mutationFn: () => apis.getProfile(),
+    onSuccess: ({ data }) => {
+      setAuthState((prev) => ({
+        ...prev,
+        isAuthenticated: !!data.data,
+        user: data?.data || null,
+        role: data?.data?.userRole || null,
+        splashLoading: false,
+      }));
+    },
+    onError: () => {
+      localStorage.removeItem("token");
+      setAuthState({ ...initialAuthState, splashLoading: false });
+    },
+  });
+
+  const loadUser = useCallback(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setAuthState({ ...initialAuthState, splashLoading: false });
+      return;
+    }
+    fetchUser();
+  }, [fetchUser]);
+
+  // ✅ Login function
   const { mutate: loginUser, isPending: isLoggingIn } = useMutation({
     mutationFn: (data) => apis.loginUser(data),
     onSuccess: ({ data }) => {
       const token = data.token;
       if (token) {
         localStorage.setItem("token", token);
+
+        // Pehle local state me token dalte hain
         setAuthState((prev) => ({
           ...prev,
           token,
+          splashLoading: false,
         }));
         toast.success("Login successful!");
 
+        // ✅ Backend se latest user data fetch
         loadUser();
       }
     },
     onError: (error) => {
+      toast.error(error);
       setAuthState({ ...initialAuthState, splashLoading: false });
-      toast.error(error || "Login failed.");
     },
   });
 
-  // // ✅ REGISTER USER
+  // ✅ Register function
   const { mutate: registerUser, isPending: isRegistering } = useMutation({
     mutationFn: (data) => apis.registerUser(data),
     onSuccess: ({ data }) => {
@@ -56,55 +88,28 @@ export const AuthProvider = ({ children }) => {
           token,
         }));
         toast.success("Registration successful!");
-        // loadUser();
+        loadUser();
       }
     },
     onError: (error) => {
-      setAuthState({ ...initialAuthState, splashLoading: false });
-      toast.error(error || "Registration failed.");
-    },
-  });
-
-  // // ✅ FETCH USER PROFILE
-  const { mutate: fetchUser, isPending: fetchingUser } = useMutation({
-    mutationFn: () => apis.getProfile(),
-    onSuccess: ({ data }) => {
-      setAuthState((prev) => ({
-        ...prev,
-        isAuthenticated: true,
-        user: data.data,
-        role: data.data?.userRole,
-        splashLoading: false,
-      }));
-    },
-    onError: () => {
-      localStorage.removeItem("token");
+      toast.error(error);
       setAuthState({ ...initialAuthState, splashLoading: false });
     },
   });
 
-  // // ✅ SET USER AFTER EDITING
-  const setUpdatedUser = (user) => {
-    setAuthState((prev) => ({ ...prev, user }));
-  };
-
-  // // ✅ LOGOUT
+  // ✅ Logout
   const logout = useCallback(() => {
     localStorage.removeItem("token");
     setAuthState({ ...initialAuthState, splashLoading: false });
     toast.success("Logged out.");
   }, []);
 
-  // // ✅ LOAD USER ON REFRESH
-  const loadUser = useCallback(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setAuthState({ ...initialAuthState, splashLoading: false });
-      return;
-    }
-    fetchUser(); // uses mutation internally
-  }, []);
+  // ✅ User update helper
+  const setUpdatedUser = (user) => {
+    setAuthState((prev) => ({ ...prev, user }));
+  };
 
+  // ✅ App start hote hi user load
   useEffect(() => {
     loadUser();
   }, [loadUser]);
@@ -113,8 +118,6 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         ...authState,
-
-        fetchingUser,
         login: loginUser,
         isLoggingIn,
         register: registerUser,

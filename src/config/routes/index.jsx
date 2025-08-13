@@ -3,6 +3,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import UserLayout from "../../layout/User";
 import AuthLayout from "../../layout/Auth";
 import AdminLayout from "../../layout/Admin";
+import { ToastContainer } from "react-toastify";
 
 const Root = () => {
   const { isAuthenticated, role, splashLoading } = useAuthContext();
@@ -14,50 +15,57 @@ const Root = () => {
           Loading....
         </div>
       ) : (
-        <Routes>
-          <Route
-            exact
-            path="/*"
-            element={
-              isAuthenticated && role === "user" ? (
-                <Navigate to="/user" replace />
-              ) : isAuthenticated && role === "admin" ? (
-                <Navigate to="/admin" replace />
-              ) : (
-                <AuthLayout />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/auth/*"
-            element={
-              isAuthenticated ? <Navigate to="/user" replace /> : <AuthLayout />
-            }
-          />
-          <Route
-            exact
-            path="/user/*"
-            element={
-              isAuthenticated && role === "user" ? (
-                <UserLayout />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-          <Route
-            exact
-            path="/admin/*"
-            element={
-              isAuthenticated && role === "admin" ? (
-                <AdminLayout />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            }
-          />
-        </Routes>
+        <>
+          <Routes>
+            <Route
+              exact
+              path="/*"
+              element={
+                isAuthenticated && role === "user" ? (
+                  <Navigate to="/user" replace />
+                ) : isAuthenticated && role === "admin" ? (
+                  <Navigate to="/admin" replace />
+                ) : (
+                  <AuthLayout />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/auth/*"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/user" replace />
+                ) : (
+                  <AuthLayout />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/user/*"
+              element={
+                isAuthenticated && role === "user" ? (
+                  <UserLayout />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+            <Route
+              exact
+              path="/admin/*"
+              element={
+                isAuthenticated && role === "admin" ? (
+                  <AdminLayout />
+                ) : (
+                  <Navigate to="/" replace />
+                )
+              }
+            />
+          </Routes>
+          <ToastContainer position="top-right" autoClose={3000} />
+        </>
       )}
     </div>
   );

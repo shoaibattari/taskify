@@ -1,4 +1,5 @@
 import React from "react";
+import { FaArrowRight } from "react-icons/fa";
 
 const variants = {
   primary: "bg-primary text-white hover:bg-primary-dark",
@@ -41,7 +42,7 @@ const CommonButton = ({
       disabled={disabled}
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${widthClass} ${disabledClass} ${className}`}
     >
-      {leftIcon && <span className="mr-2">{FaArrowRight}</span>}
+      {leftIcon && <span className="mr-2">{leftIcon}</span>}
       {children}
       {rightIcon && <span className="ml-2">{rightIcon}</span>}
     </button>
