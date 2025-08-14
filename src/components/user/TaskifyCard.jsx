@@ -2,7 +2,14 @@ import React from "react";
 import { CommonButton } from "../common";
 import { useNavigate } from "react-router-dom";
 
-const TaskifyCard = ({ task, deleteTask, setSelectedTask, deletingTask }) => {
+const TaskifyCard = ({
+  task,
+  deleteTask,
+  setSelectedTask,
+  deletingTask,
+  isAdmin = false,
+}) => {
+  console.log("🚀 ~ TaskifyCard ~ task:", task);
   const navigate = useNavigate();
   return (
     <div
@@ -24,7 +31,7 @@ const TaskifyCard = ({ task, deleteTask, setSelectedTask, deletingTask }) => {
       </h3>
 
       {/* Description */}
-      <p className="text-gray-600 text-center mb-4 line-clamp-4">
+      <p className="text-gray-600 text-center mb-4 line-clamp-3">
         {task?.description || "No description available"}
       </p>
 
@@ -57,6 +64,13 @@ const TaskifyCard = ({ task, deleteTask, setSelectedTask, deletingTask }) => {
       >
         View Details
       </CommonButton>
+      {isAdmin && (
+        <div>
+          <p className="text-right text-sm text-light-grey capitalize">
+            Created by: {task?.user?.name}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
