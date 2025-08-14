@@ -10,7 +10,13 @@ export {
   Login,
   Signup,
   Taskify,
+  CallToAction,
 } from "./auth/index";
 
 // user
-export { AddTaskify } from "./user/index";
+export {
+  AddTaskify,
+  EditTaskify,
+  TaskifyCard,
+  TaskifySkeleton,
+} from "./user/index";

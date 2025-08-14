@@ -8,6 +8,7 @@ import {
 import { toast } from "react-toastify";
 import { useMutation } from "react-query";
 import apis from "../config/api";
+import { useNavigate } from "react-router-dom";
 
 // Initial state
 const initialAuthState = {
@@ -22,6 +23,7 @@ const AuthContext = createContext(initialAuthState);
 
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState(initialAuthState);
+  const navigate = useNavigate();
 
   // ✅ Backend se current user profile fetch karega
   const { mutate: fetchUser } = useMutation({
@@ -80,16 +82,10 @@ export const AuthProvider = ({ children }) => {
   const { mutate: registerUser, isPending: isRegistering } = useMutation({
     mutationFn: (data) => apis.registerUser(data),
     onSuccess: ({ data }) => {
-      const token = data.token;
-      if (token) {
-        localStorage.setItem("token", token);
-        setAuthState((prev) => ({
-          ...prev,
-          token,
-        }));
-        toast.success("Registration successful!");
-        loadUser();
-      }
+      console.log("🚀 ~ AuthProvider ~ data:", data);
+      toast.success(data?.message || "Registration successful!");
+      navigate("/login");
+      loadUser();
     },
     onError: (error) => {
       toast.error(error);

@@ -5,5 +5,5 @@ export { LandingPageScreen, LoginScreen, SignupScreen } from "./auth/index";
 export {
   UserDashboardScreen,
   UserAddTaskiyScreen,
-  UserEditTaskiyScreen,
+  UserTaskifyDetailScreen,
 } from "./user/index";

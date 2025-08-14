@@ -45,8 +45,8 @@ const Taskify = () => {
             {tasks.slice(0, 3).map((task) => {
               return (
                 <div
-                  key={task._id}
-                  className="relative bg-gray-50 shadow-lg rounded-xl p-6 pt-16 hover:shadow-2xl transition"
+                  key={task?._id}
+                  className="relative bg-gray-50 hover:bg-primary/20 cursor-pointer shadow-lg shadow-secondary rounded-xl space-y-4 p-6 pt-20 hover:shadow-primary transition hover:scale-105 duration-300"
                 >
                   {/* Avatar */}
                   <div className="absolute -top-10 left-1/2 transform -translate-x-1/2">
@@ -59,12 +59,14 @@ const Taskify = () => {
                     />
                   </div>
 
-                  {/* Content */}
-                  <h3 className="text-xl font-semibold mb-2 text-center">
-                    {task.title}
+                  {/* Title */}
+                  <h3 className="text-xl font-semibold mb-2 text-center min-h-14 max-h-14 text-gray-800">
+                    {task?.title}
                   </h3>
-                  <p className="text-gray-600 text-center">
-                    {task.description}
+
+                  {/* Description */}
+                  <p className="text-gray-600 text-center mb-4 line-clamp-4">
+                    {task?.description || "No description available"}
                   </p>
                 </div>
               );

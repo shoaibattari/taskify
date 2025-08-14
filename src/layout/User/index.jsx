@@ -5,7 +5,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import {
   UserAddTaskiyScreen,
   UserDashboardScreen,
-  UserEditTaskiyScreen,
+  UserTaskifyDetailScreen,
 } from "../../views";
 
 const UserLayout = () => {
@@ -15,12 +15,12 @@ const UserLayout = () => {
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 bg-gray-800 text-white p-4">
-        <h2 className="text-lg font-bold mb-4">User Panel</h2>
+        <h2 className="text-lg font-bold mb-4">Dashbaord</h2>
         <nav className="space-y-2">
           <Link to="/dashboard" className="block hover:underline">
             Dashboard
           </Link>
-          <Link to="tasks/create" className="block hover:underline">
+          <Link to="/user/tasks/create" className="block hover:underline">
             Create Taskify
           </Link>
         </nav>
@@ -34,7 +34,7 @@ const UserLayout = () => {
         <Routes>
           <Route path="/*" element={<UserDashboardScreen />} />
           <Route path="/tasks/create" element={<UserAddTaskiyScreen />} />
-          <Route path="/tasks/edit/:id" element={<UserEditTaskiyScreen />} />
+          <Route path="/taskify/:id" element={<UserTaskifyDetailScreen />} />
         </Routes>
       </main>
     </div>

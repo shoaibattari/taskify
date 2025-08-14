@@ -2,16 +2,19 @@ import { useState, useEffect } from "react";
 import { useMutation } from "react-query";
 import apis from "../../config/api";
 import { toast } from "react-toastify";
-import { CommonButton } from "../../components";
+import {
+  CommonButton,
+  EditTaskify,
+  TaskifyCard,
+  TaskifySkeleton,
+} from "../../components";
 import { FiClipboard, FiPlus } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(true);
-  const [editId, setEditId] = useState(null);
-  const [editText, setEditText] = useState("");
-  const [editingTask, setEditingTask] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   const navigate = useNavigate();
 
@@ -25,21 +28,6 @@ const Dashboard = () => {
     onError: (error) => {
       toast.error(error?.message || "Failed to load tasks");
       setLoadingTasks(false);
-    },
-  });
-
-  // ✅ Edit Task
-  const { mutate: updateTask } = useMutation({
-    mutationFn: (updatedTask) => apis.updateTask(updatedTask),
-    onSuccess: () => {
-      toast.success("Task updated!");
-      setEditId(null);
-      fetchTasks();
-      setEditingTask(false);
-    },
-    onError: () => {
-      toast.error("Failed to update task");
-      setEditingTask(false);
     },
   });
 
@@ -66,16 +54,6 @@ const Dashboard = () => {
       toast.error("Failed to delete all tasks");
     },
   });
-  const handleEditClick = (task) => {
-    setEditId(task._id);
-    setEditText(task.title);
-  };
-
-  const handleEditSave = () => {
-    if (!editText.trim()) return;
-    setEditingTask(true);
-    updateTask({ id: editId, title: editText });
-  };
 
   const deleteTask = (id) => {
     removeTask(id);
@@ -101,7 +79,8 @@ const Dashboard = () => {
       <div className="flex justify-between items-center gap-2">
         <h1 className="text-2xl font-bold mb-6 flex items-center gap-2">
           <FiClipboard className="text-primary" />
-          My Tasks
+          My Tasks{" "}
+          <span className="text-secondary text-3xl">{tasks?.length}</span>
         </h1>
         <div className="flex gap-2">
           {tasks.length > 0 && (
@@ -128,64 +107,38 @@ const Dashboard = () => {
       </div>
 
       {loadingTasks ? (
-        <div className="text-center py-6 text-gray-500">Loading tasks...</div>
+        <div className="grid grid-cols-1 laptop:grid-cols-3 gap-14 py-12">
+          {Array.from({ length: 6 }).map((_, idx) => (
+            <TaskifySkeleton key={idx} />
+          ))}
+        </div>
       ) : tasks.length === 0 ? (
         <div className="text-center py-6 text-gray-500">
           No tasks yet. Add some!
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-4 py-12">
-          {tasks.map((task) => {
+        <div className="grid grid-cols-1 laptop:grid-cols-3 gap-14 py-12 ">
+          {tasks?.map((task) => {
             return (
-              <div
-                key={task._id}
-                className="relative bg-gray-50 cursor-pointer shadow-lg shadow-secondary rounded-xl p-6 pt-20 hover:shadow-primary transition"
-              >
-                {/* Avatar */}
-                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2">
-                  <img
-                    src={
-                      task?.avatar?.url || "https://i.pravatar.cc/150?img=48"
-                    }
-                    alt="avatar"
-                    className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
-                  />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-xl font-semibold mb-2 text-center text-gray-800">
-                  {task.title}
-                </h3>
-
-                {/* Description */}
-                <p className="text-gray-600 text-center mb-4">
-                  {task.description || "No description available"}
-                </p>
-
-                {/* Buttons */}
-                <div className="flex justify-center gap-3">
-                  <CommonButton
-                    variant="primary"
-                    fullWidth
-                    size="md"
-                    // onClick={() => handleEditClick(task)}
-                  >
-                    Edit
-                  </CommonButton>
-                  <CommonButton
-                    variant="danger"
-                    size="md"
-                    fullWidth
-                    disabled={deletingTask}
-                    onClick={() => deleteTask(task._id)}
-                  >
-                    {deletingTask ? "..." : "Delete"}
-                  </CommonButton>
-                </div>
-              </div>
+              <TaskifyCard
+                key={task?._id}
+                deleteTask={deleteTask}
+                setSelectedTask={setSelectedTask}
+                deletingTask={deletingTask}
+                task={task}
+              />
             );
           })}
         </div>
+      )}
+
+      {/* Modal for Editing */}
+      {selectedTask && (
+        <EditTaskify
+          task={selectedTask}
+          onClose={() => setSelectedTask(null)}
+          onSuccess={fetchTasks}
+        />
       )}
     </div>
   );

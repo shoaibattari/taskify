@@ -6,6 +6,7 @@ import {
   Navbar,
   Taskify,
   Testimonials,
+  CallToAction,
 } from "../../components";
 
 const LandingPage = () => {
@@ -16,6 +17,7 @@ const LandingPage = () => {
       <Taskify />
       <FeaturesSection />
       <HowItWorks />
+      <CallToAction />
       <Testimonials />
       <Footer />
     </div>
