@@ -9,7 +9,6 @@ const TaskifyCard = ({
   deletingTask,
   isAdmin = false,
 }) => {
-  console.log("🚀 ~ TaskifyCard ~ task:", task);
   const navigate = useNavigate();
   return (
     <div
@@ -36,25 +35,27 @@ const TaskifyCard = ({
       </p>
 
       {/* Buttons */}
-      <div className="flex justify-center gap-3">
-        <CommonButton
-          variant="primary"
-          fullWidth
-          size="md"
-          onClick={() => setSelectedTask(task)}
-        >
-          Edit
-        </CommonButton>
-        <CommonButton
-          variant="danger"
-          size="md"
-          fullWidth
-          disabled={deletingTask}
-          onClick={() => deleteTask(task._id)}
-        >
-          {deletingTask ? "..." : "Delete"}
-        </CommonButton>
-      </div>
+      {!isAdmin && (
+        <div className="flex justify-center gap-3">
+          <CommonButton
+            variant="primary"
+            fullWidth
+            size="md"
+            onClick={() => setSelectedTask(task)}
+          >
+            Edit
+          </CommonButton>
+          <CommonButton
+            variant="danger"
+            size="md"
+            fullWidth
+            disabled={deletingTask}
+            onClick={() => deleteTask(task._id)}
+          >
+            {deletingTask ? "..." : "Delete"}
+          </CommonButton>
+        </div>
+      )}
 
       <CommonButton
         variant="secondary"
