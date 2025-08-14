@@ -17,12 +17,12 @@ const HeroSection = () => {
             Taskify helps you stay on top of your to-dos with a simple and
             intuitive interface.
           </p>
-          <CommonButton onClick={() => navigate("/login")} variant="secondary">
+          <CommonButton onClick={() => navigate("/login")} variant="secondary" >
             Get Started
           </CommonButton>
         </div>
         <div className="flex justify-center">
-          <FaTasks className="text-[200px] opacity-80" />
+          <FaTasks className="text-[200px] text-primary opacity-80" />
         </div>
       </Wrapper>
     </section>

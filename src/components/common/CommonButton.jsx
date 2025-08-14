@@ -2,11 +2,11 @@ import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const variants = {
-  primary: "bg-primary text-white hover:bg-primary-dark",
-  secondary: "bg-secondary text-white hover:bg-secondary-dark",
-  success: "bg-green/50 text-white hover:bg-green/60",
-  danger: "bg-red/50 text-white hover:bg-red/60",
-  warning: "bg-yellow/50 text-white hover:bg-yellow/60",
+  primary: "bg-primary text-white hover:bg-secondary",
+  secondary: "bg-secondary text-white hover:bg-primary",
+  success: "bg-green text-white hover:bg-green/60",
+  danger: "bg-red text-white hover:bg-red/60",
+  warning: "bg-white text-orange hover:bg-white/60",
   light: "bg-gray/10 text-gray-800 hover:bg-gray/20",
   dark: "bg-gray/80 text-white hover:bg-gray/90",
 };
