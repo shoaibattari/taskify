@@ -1,8 +1,8 @@
 const adminApi = (api) => ({
   getLandingTaskify: () => api.get("/admin/landing-taskify"),
-  getAllUsers: () => api.get("/admin/allUsers"),
+  getAllUsers: () => api.get("/admin/all-users"),
   getAllTodosForAdmin: () => api.get("/admin/all-taskify"),
-  deleteAllTodosForAdmin: () => api.delete("/admin/deletealltodos"),
+  deleteAllTaskifyForAdmin: () => api.delete("/admin/delete-all-taskify"),
 });
 
 export default adminApi;

@@ -1,8 +1,13 @@
 import React from "react";
 import { CommonButton } from "../../components";
 import { useAuthContext } from "../../context/AuthContext";
-import { AdminDashboardScreen, AdminTasksScreen } from "../../views/admin";
+
 import { Link, Route, Routes } from "react-router-dom";
+import {
+  AdminDashboardScreen,
+  AdminTasksScreen,
+  AdminUsersScreen,
+} from "../../views/index";
 
 const AdminLayout = () => {
   const { logout } = useAuthContext();
@@ -18,6 +23,9 @@ const AdminLayout = () => {
           <Link to="/admin/tasks" className="block hover:underline">
             All Tasks
           </Link>
+          <Link to="/admin/users" className="block hover:underline">
+            All Users
+          </Link>
         </nav>
         <div className="mt-6">
           <CommonButton onClick={logout}>Logout</CommonButton>
@@ -29,6 +37,7 @@ const AdminLayout = () => {
         <Routes>
           <Route path="/*" element={<AdminDashboardScreen />} />
           <Route path="/tasks" element={<AdminTasksScreen />} />
+          <Route path="/users" element={<AdminUsersScreen />} />
         </Routes>
       </main>
     </div>

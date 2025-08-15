@@ -8,7 +8,7 @@ import {
   TaskifyCard,
   TaskifySkeleton,
 } from "../../components";
-import { FiClipboard, FiPlus } from "react-icons/fi";
+import { FiClipboard } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -29,6 +29,30 @@ const Dashboard = () => {
     },
   });
 
+  // Delete All
+  const { mutate: deleteAll, isLoading: deletingAll } = useMutation({
+    mutationFn: () => apis.deleteAllTaskifyForAdmin(),
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success("All tasks deleted!");
+      setTasks([]);
+      fetchTasks();
+    },
+    onError: () => {
+      toast.error("Failed to delete all tasks");
+    },
+  });
+
+  const deleteAllTasks = () => {
+    if (tasks.length === 0) {
+      toast.info("No tasks to delete");
+      return;
+    }
+    if (window.confirm("Are you sure you want to delete ALL tasks?")) {
+      deleteAll();
+    }
+  };
+
   // ✅ Component mount par load tasks
   useEffect(() => {
     fetchTasks();
@@ -42,7 +66,7 @@ const Dashboard = () => {
           All Users Tasks{" "}
           <span className="text-secondary text-3xl">{tasks?.length}</span>
         </h1>
-        {/* <div className="flex gap-2">
+        <div className="flex gap-2">
           {tasks.length > 0 && (
             <CommonButton
               type="button"
@@ -54,16 +78,7 @@ const Dashboard = () => {
               {deletingAll ? "Deleting..." : "Delete All"}
             </CommonButton>
           )}
-          <CommonButton
-            type="button"
-            variant="primary"
-            size="md"
-            leftIcon={<FiPlus />}
-            onClick={() => navigate("/user/tasks/create")}
-          >
-            Add Task
-          </CommonButton>
-        </div> */}
+        </div>
       </div>
 
       {fetchingTask ? (

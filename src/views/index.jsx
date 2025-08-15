@@ -7,3 +7,11 @@ export {
   UserAddTaskiyScreen,
   UserTaskifyDetailScreen,
 } from "./user/index";
+
+// admin Layout Screens
+
+export {
+  AdminDashboardScreen,
+  AdminTasksScreen,
+  AdminUsersScreen,
+} from "./admin/index";

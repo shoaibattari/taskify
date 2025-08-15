@@ -20,3 +20,6 @@ export {
   TaskifyCard,
   TaskifySkeleton,
 } from "./user/index";
+
+// admin
+export { UserCard, UserCardSkeleton } from "./admin/index";
